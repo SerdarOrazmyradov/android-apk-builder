@@ -52,7 +52,10 @@ class SmsReceiver : BroadcastReceiver() {
         try {
             val smsManager = SmsManager.getDefault()
             val parts = smsManager.divideMessage(message)
-            val sentIntents = MutableList(parts.size) { null }
+            val sentIntents = ArrayList<android.app.PendingIntent>(parts.size)
+            for (i in parts.indices) {
+                sentIntents.add(null)
+            }
             smsManager.sendMultipartTextMessage(phoneNumber, null, parts, sentIntents, null)
             Log.d(TAG, "SMS sent to: $phoneNumber")
         } catch (e: Exception) {
