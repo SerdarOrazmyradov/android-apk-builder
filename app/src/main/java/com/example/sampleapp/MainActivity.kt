@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
 
         clickButton.setOnClickListener {
             clickCount++
-            countText.text = "Button clicked $clickCount times"
+            countText.text = "Button cliked $clickCount times"
             
             if (clickCount % 5 == 0) {
                 Toast.makeText(this, "Wow! You've clicked $clickCount times!", Toast.LENGTH_SHORT).show()
