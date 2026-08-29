@@ -53,13 +53,6 @@ dependencies {
     // JSON Parsing (for API responses, API 14+ compatible)
     implementation 'com.google.code.gson:gson:2.8.9'
     
-    // SMS Gateway Services (choose one or both)
-    // Vonage/Nexmo SMS API (API 16+ compatible)
-    implementation 'com.vonage:client:6.11.0'
-    
-    // Twilio SMS API (API 21+ compatible)
-    implementation 'com.twilio.sdk:twilio:9.0.0'
-    
     // Testing
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
