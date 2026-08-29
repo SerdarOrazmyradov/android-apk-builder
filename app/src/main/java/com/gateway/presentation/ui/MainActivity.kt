@@ -4,38 +4,62 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.gateway.data.db.DatabaseHelper
+import com.gateway.data.network.ModelManager
 import com.example.sampleapp.R
 
 class MainActivity : AppCompatActivity() {
     private lateinit var apiKeyInput: EditText
     private lateinit var phoneInput: EditText
     private lateinit var statusText: TextView
+    private lateinit var modelSpinner: Spinner
     private lateinit var db: DatabaseHelper
+    private lateinit var modelManager: ModelManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         db = DatabaseHelper(this)
+        modelManager = ModelManager(this)
+
         apiKeyInput = findViewById(R.id.api_key_input)
         phoneInput = findViewById(R.id.phone_input)
         statusText = findViewById(R.id.status_text)
+        modelSpinner = findViewById(R.id.model_spinner)
         val saveApiKeyBtn = findViewById<Button>(R.id.save_api_key_btn)
         val addUserBtn = findViewById<Button>(R.id.add_user_btn)
 
         saveApiKeyBtn.setOnClickListener { saveApiKey() }
         addUserBtn.setOnClickListener { addUser() }
 
+        setupModelSpinner()
         requestPermissions()
         updateStatus()
+    }
+
+    private fun setupModelSpinner() {
+        val models = modelManager.getAllModels()
+        val modelNames = models.map { "${it.displayName} (${it.id})" }
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, modelNames)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        modelSpinner.adapter = adapter
+
+        // Set default model as selected
+        val defaultModelId = modelManager.getDefaultModel()
+        val defaultIndex = models.indexOfFirst { it.id == defaultModelId }
+        if (defaultIndex >= 0) {
+            modelSpinner.setSelection(defaultIndex)
+        }
     }
 
     private fun saveApiKey() {
@@ -67,8 +91,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateStatus() {
         val apiKey = db.getApiKey()
-        val status = "API Key: " + if (apiKey.isEmpty()) "Not Set" else "✓ Configured"
-        statusText.text = status
+        val statusLine1 = "API Key: " + if (apiKey.isEmpty()) "Not Set" else "✓ Configured"
+        val selectedModel = modelManager.getAllModels().getOrNull(modelSpinner.selectedItemPosition)?.id
+            ?: modelManager.getDefaultModel()
+        val statusLine2 = "Model: $selectedModel"
+        statusText.text = "$statusLine1\n$statusLine2"
     }
 
     private fun requestPermissions() {

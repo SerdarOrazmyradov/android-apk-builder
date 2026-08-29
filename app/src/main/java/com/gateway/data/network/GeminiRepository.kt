@@ -1,19 +1,17 @@
 package com.gateway.data.network
 
-import okhttp3.Call
-import okhttp3.Callback
+import android.content.Context
+import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.OkHttpClient
-import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
-import okhttp3.Response
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
 
-class GeminiRepository {
+class GeminiRepository(private val context: Context) {
     private val client: OkHttpClient = NetworkClient.getTls12Client()
+    private val modelManager: ModelManager = ModelManager(context)
 
     interface ApiCallback {
         fun onSuccess(responseText: String)
@@ -21,8 +19,14 @@ class GeminiRepository {
     }
 
     fun askGemini(apiKey: String, prompt: String, callback: ApiCallback) {
+        askGeminiWithModel(apiKey, prompt, null, callback)
+    }
+
+    fun askGeminiWithModel(apiKey: String, prompt: String, modelId: String?, callback: ApiCallback) {
         try {
-            val url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=$apiKey"
+            // Use specified model or get default/latest
+            val model = modelId ?: modelManager.getDefaultModel()
+            val url = "https://generativelanguage.googleapis.com/v1beta/models/$model:generateContent?key=$apiKey"
 
             // System Instruction: Keep response brief for SMS (160 chars max)
             val systemInstruction = "Answer briefly, under 160 characters, no markdown styling."
@@ -33,7 +37,12 @@ class GeminiRepository {
             val contentsObj = JSONObject().put("contents", JSONArray().put(partsObj))
 
             val body = contentsObj.toString().toRequestBody("application/json".toMediaType())
-            val request = Request.Builder().url(url).post(body).build()
+            val request = Request.Builder()
+                .url(url)
+                .header("x-goog-api-key", apiKey)
+                .header("Content-Type", "application/json")
+                .post(body)
+                .build()
 
             client.newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
@@ -65,4 +74,8 @@ class GeminiRepository {
             callback.onError("Request Error: ${e.message}")
         }
     }
+
+    fun getAvailableModels(): List<ModelConfig> = modelManager.getAllModels()
+
+    fun getDefaultModel(): String = modelManager.getDefaultModel()
 }

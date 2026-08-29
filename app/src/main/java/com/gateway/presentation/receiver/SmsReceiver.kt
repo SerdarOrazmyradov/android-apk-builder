@@ -27,7 +27,8 @@ class SmsReceiver : BroadcastReceiver() {
             if (db.isUserAllowed(sender)) {
                 val apiKey = db.getApiKey()
                 if (apiKey.isNotEmpty()) {
-                    GeminiRepository().askGemini(apiKey, messageBody, object : GeminiRepository.ApiCallback {
+                    // Use GeminiRepository with default model from models.json
+                    GeminiRepository(context).askGemini(apiKey, messageBody, object : GeminiRepository.ApiCallback {
                         override fun onSuccess(responseText: String) {
                             Log.d(TAG, "AI Response: $responseText")
                             sendSmsResponse(context, sender, responseText)
