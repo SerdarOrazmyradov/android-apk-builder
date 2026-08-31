@@ -40,14 +40,30 @@ jobs:
       - name: Build Release APKs
         run: ./gradlew assembleRelease
 
-      - name: Upload Debug APKs
-        uses: actions/upload-artifact@v4
-        with:
-          name: android-debug-apks
-          path: app/build/outputs/apk/debug/*.apk
+      - name: Show generated APKs
+        run: |
+          find app/build/outputs/apk/release \
+            -type f \
+            -name "*.apk" \
+            -print
 
-      - name: Upload Release APKs
+      - name: Upload armeabi-v7a Release APK
         uses: actions/upload-artifact@v4
         with:
-          name: android-release-apks
-          path: app/build/outputs/apk/release/*.apk
+          name: app-armeabi-v7a-release
+          path: app/build/outputs/apk/release/*armeabi-v7a*.apk
+          if-no-files-found: error
+
+      - name: Upload arm64-v8a Release APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-arm64-v8a-release
+          path: app/build/outputs/apk/release/*arm64-v8a*.apk
+          if-no-files-found: error
+
+      - name: Upload x86_64 Release APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-x86_64-release
+          path: app/build/outputs/apk/release/*x86_64*.apk
+          if-no-files-found: error
