@@ -27,7 +27,7 @@ class GatewayService : Service() {
 
         if (!senderPhone.isNullOrEmpty() && !messageBody.isNullOrEmpty()) {
             val user = AllowedUsers.getUser(senderPhone)
-            if (user != null) {
+            if (user != null && user.apiKey.isNotEmpty()) {
                 CoroutineScope(Dispatchers.IO).launch {
                     val aiResponse = GeminiApiClient.getAiResponse(
                         apiKey = user.apiKey,
@@ -66,7 +66,7 @@ class GatewayService : Service() {
 
         val notification: Notification = NotificationCompat.Builder(this, channelId)
             .setContentTitle("AI SMS Gateway")
-            .setContentText("7/24 arka fonda işläp dur...")
+            .setContentText("7/24 işläp dur...")
             .setSmallIcon(android.R.drawable.stat_notify_chat)
             .build()
 

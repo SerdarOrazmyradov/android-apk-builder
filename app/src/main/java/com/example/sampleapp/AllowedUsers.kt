@@ -2,13 +2,12 @@ package com.example.sampleapp
 
 data class UserConfig(
     val name: String,
-    val phoneNumber: String, // Diňe sany saklaň, mysal üçin: 99361358756
+    val phoneNumber: String, // Diňe sanlar saklanýar
     val apiKey: String,
-    val model: String = "gemini-2.5-flash" // Bellenen modeller: ["gemini-2.5-flash", "gemini-2.5-pro"]
+    val model: String = "gemini-2.5-flash"
 )
 
 object AllowedUsers {
-    // Siz oz API key-leriniz bilen calysyn
     private val users = listOf(
         UserConfig("Serdar", "99361358756", BuildConfig.SERDAR_GEMINI_KEY),
         UserConfig("Maral", "99371808643", BuildConfig.MARAL_GEMINI_KEY),

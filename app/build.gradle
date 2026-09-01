@@ -10,10 +10,11 @@ android {
     defaultConfig {
         applicationId "com.example.sampleapp"
         minSdk 21
-        targetSdk 22
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
+        // GitHub Actions ENV diýip berlen maýdalary get etmek
         def serdarKey = System.getenv("SERDAR_GEMINI_KEY") ?: ""
         def jennetKey = System.getenv("JENNET_GEMINI_KEY") ?: ""
         def maralKey = System.getenv("MARAL_GEMINI_KEY") ?: ""
@@ -51,10 +52,9 @@ dependencies {
     implementation 'androidx.core:core:1.3.2'
     implementation 'com.google.android.material:material:1.3.0'
     
-    // Android 5.1 (API 22) ucin gabat gelyan OkHttp we Gson
+    // Android 5.1 (API 21/22) üçin OkHttp 3.12.x wersiýasy hökmany
     implementation 'com.squareup.okhttp3:okhttp:3.12.13'
     implementation 'com.google.code.gson:gson:2.8.9'
     
-    // Coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
 }
