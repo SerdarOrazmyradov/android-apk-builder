@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.telephony.SmsMessage
 import android.util.Log
-import com.gateway.service.SmsService
+import com.sampleapp.service.SmsService
 
 class SmsReceiver : BroadcastReceiver() {
 

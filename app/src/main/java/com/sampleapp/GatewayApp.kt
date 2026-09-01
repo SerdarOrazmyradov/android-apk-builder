@@ -1,4 +1,4 @@
-package com.gateway
+package com.sampleapp.gateway
 
 import android.app.Application
 import org.conscrypt.Conscrypt

@@ -1,4 +1,4 @@
-package com.gateway.presentation.ui
+package com.sampleapp
 
 import android.Manifest
 import android.content.Context
@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.sampleapp.R
-import com.gateway.service.SmsService
+import com.sampleapp.service.SmsService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
