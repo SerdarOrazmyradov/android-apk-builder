@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.sampleapp.R
-import com.sampleapp.service.SmsService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -24,6 +23,7 @@ import java.util.concurrent.TimeUnit
 class MainActivity : AppCompatActivity() {
 
     private val PERMISSION_REQUEST_CODE = 101
+    private val API_BASE_URL = "http://10.0.2.2:8000"  // Default API endpoint
 
     private lateinit var etApiKey: EditText
     private lateinit var btnSave: Button
@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
         .build()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate()
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         etApiKey = findViewById(R.id.etApiKey)
@@ -107,7 +107,7 @@ class MainActivity : AppCompatActivity() {
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 val request = Request.Builder()
-                    .url("$url/api/ping")
+                    .url("$API_BASE_URL/api/ping")
                     .addHeader("X-API-KEY", key)
                     .get()
                     .build()
