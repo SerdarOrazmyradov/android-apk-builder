@@ -1,6 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Sample App</string>
-    <string name="welcome_message">Welcome to Sample App!</string>
-    <string name="click_me">Click Me!</string>
-    <string name="initial_count">Button clicked 0 times</string>
+    <string name="app_name">AI SMS Gateway</string>
+    <string name="app_description">Forward SMS from allowed users to Gemini AI and reply with AI responses</string>
+    <string name="status_initialized">Initialized</string>
+    <string name="status_running">Running</string>
+    <string name="status_error">Error</string>
 </resources>

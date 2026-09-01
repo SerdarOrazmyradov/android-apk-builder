@@ -4,72 +4,104 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    android:gravity="center">
+    android:background="@android:color/white">
 
+    <!-- Header -->
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="AI SMS Gateway"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:layout_marginBottom="24dp" />
-
-    <TextView
-        android:id="@+id/status_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="API Key: Not Set\nModel: gemini-3.5-flash"
-        android:textSize="12sp"
-        android:layout_marginBottom="16dp"
-        android:padding="8dp"
-        android:background="@android:drawable/edit_text"
-        android:textColor="@android:color/white" />
-
-    <EditText
-        android:id="@+id/api_key_input"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter Gemini API Key"
-        android:inputType="textPassword"
-        android:layout_marginBottom="8dp"
-        android:padding="12dp"
-        android:background="@android:drawable/edit_text" />
-
-    <Button
-        android:id="@+id/save_api_key_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Save API Key"
+        android:textColor="@android:color/black"
         android:layout_marginBottom="16dp" />
 
+    <!-- Status Display -->
+    <TextView
+        android:id="@+id/tvStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Status: Initialized"
+        android:textSize="12sp"
+        android:layout_marginBottom="16dp"
+        android:padding="12dp"
+        android:background="#F0F0F0"
+        android:textColor="@android:color/black" />
+
+    <!-- Gemini API Key Section -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Select AI Model:"
+        android:text="Gemini API Key:"
+        android:textStyle="bold"
         android:textSize="14sp"
-        android:layout_marginBottom="8dp" />
-
-    <Spinner
-        android:id="@+id/model_spinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:background="@android:drawable/edit_text" />
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="4dp" />
 
     <EditText
-        android:id="@+id/phone_input"
+        android:id="@+id/etApiKey"
         android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="Enter your Gemini API key"
+        android:inputType="textPassword"
+        android:layout_marginBottom="8dp"
+        android:padding="12dp"
+        android:background="#E0E0E0" />
+
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="Save API Key"
+        android:textColor="@android:color/white"
+        android:background="#4CAF50"
+        android:layout_marginBottom="16dp" />
+
+    <!-- User Management Section -->
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Enter Phone Number (e.g., +99312345678)"
+        android:text="Allowed Users (SMS Senders):"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="4dp" />
+
+    <!-- Phone Number Input -->
+    <EditText
+        android:id="@+id/etPhoneNumber"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="Phone: +99312345678"
         android:inputType="phone"
         android:layout_marginBottom="8dp"
         android:padding="12dp"
-        android:background="@android:drawable/edit_text" />
+        android:background="#E0E0E0" />
 
+    <!-- Add User Button -->
     <Button
-        android:id="@+id/add_user_btn"
+        android:id="@+id/btnTestApi"
         android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="+ Add User"
+        android:textColor="@android:color/white"
+        android:background="#2196F3"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Users List -->
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add Allowed User" />
+        android:text="Registered Users:"
+        android:textStyle="bold"
+        android:textSize="12sp"
+        android:layout_marginBottom="8dp" />
+
+    <ListView
+        android:id="@+id/lvUsers"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#F5F5F5" />
 
 </LinearLayout>

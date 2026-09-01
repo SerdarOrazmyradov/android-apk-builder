@@ -2,30 +2,31 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Permissions -->
+    <!-- SMS Permissions -->
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-    <!-- Required hardware features -->
+    <!-- Optional hardware features -->
     <uses-feature
         android:name="android.hardware.telephony"
         android:required="false" />
 
     <application
-        android:name="com.sampleapp.gateway.GatewayApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.SampleApp"
+        android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
         tools:targetApi="31">
 
+        <!-- Main Activity -->
         <activity
-            android:name="com.sampleapp.MainActivity"
+            android:name="io.turkmensms.aigateway.ui.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,9 +34,9 @@
             </intent-filter>
         </activity>
 
-        <!-- SMS Receiver -->
+        <!-- SMS Receiver for incoming SMS -->
         <receiver
-            android:name="com.sampleapp.SmsReceiver"
+            android:name="io.turkmensms.aigateway.receiver.SmsReceiver"
             android:exported="true"
             android:permission="android.permission.RECEIVE_SMS">
             <intent-filter>
