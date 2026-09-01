@@ -10,10 +10,10 @@ data class UserConfig(
 object AllowedUsers {
     // Siz oz API key-leriniz bilen calysyn
     private val users = listOf(
-        UserConfig("Serdar", "99361358756", "YOUR_GEMINI_API_KEY_SERDAR"),
-        UserConfig("Maral", "99371808643", "YOUR_GEMINI_API_KEY_MARAL"),
-        UserConfig("Ejem", "99365263069", "YOUR_GEMINI_API_KEY_EJEM"),
-        UserConfig("Jennet", "99361282375", "YOUR_GEMINI_API_KEY_JENNET")
+        UserConfig("Serdar", "99361358756", BuildConfig.SERDAR_GEMINI_KEY),
+        UserConfig("Maral", "99371808643", BuildConfig.MARAL_GEMINI_KEY),
+        UserConfig("Ejem", "99365263069", BuildConfig.EJEM_GEMINI_KEY),
+        UserConfig("Jennet", "99361282375", BuildConfig.JENNET_GEMINI_KEY)
     )
 
     fun getUser(rawPhoneNumber: String): UserConfig? {

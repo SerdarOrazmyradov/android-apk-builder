@@ -13,6 +13,16 @@ android {
         targetSdk 34
         versionCode 1
         versionName "1.0"
+
+        def serdarKey = System.getenv("SERDAR_GEMINI_KEY") ?: ""
+        def jennetKey = System.getenv("JENNET_GEMINI_KEY") ?: ""
+        def maralKey = System.getenv("MARAL_GEMINI_KEY") ?: ""
+        def ejemKey = System.getenv("EJEM_GEMINI_KEY") ?: ""
+
+        buildConfigField "String", "SERDAR_GEMINI_KEY", "\"${serdarKey}\""
+        buildConfigField "String", "JENNET_GEMINI_KEY", "\"${jennetKey}\""
+        buildConfigField "String", "MARAL_GEMINI_KEY", "\"${maralKey}\""
+        buildConfigField "String", "EJEM_GEMINI_KEY", "\"${ejemKey}\""
     }
 
     buildTypes {

@@ -11,6 +11,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      SERDAR_GEMINI_KEY: ${{ secrets.SERDAR_GEMINI_KEY }}
+      JENNET_GEMINI_KEY: ${{ secrets.JENNET_GEMINI_KEY }}
+      MARAL_GEMINI_KEY: ${{ secrets.MARAL_GEMINI_KEY }}
+      EJEM_GEMINI_KEY: ${{ secrets.EJEM_GEMINI_KEY }}
+
     steps:
     - uses: actions/checkout@v4
 
