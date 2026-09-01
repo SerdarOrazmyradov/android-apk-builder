@@ -15,7 +15,7 @@
         android:required="false" />
 
     <application
-        android:name="com.gateway.GatewayApp"
+        android:name="com.simpleapp.GatewayApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -25,7 +25,7 @@
         tools:targetApi="31">
 
         <activity
-            android:name="com.gateway.presentation.ui.MainActivity"
+            android:name="com.simpleapp.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,7 +35,7 @@
 
         <!-- SMS Receiver -->
         <receiver
-            android:name="com.gateway.presentation.receiver.SmsReceiver"
+            android:name="com.simpleapp.SmsReceiver"
             android:exported="true"
             android:permission="android.permission.RECEIVE_SMS">
             <intent-filter>
