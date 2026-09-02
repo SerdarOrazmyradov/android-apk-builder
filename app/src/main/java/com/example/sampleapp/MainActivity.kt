@@ -1,10 +1,14 @@
 package com.example.sampleapp
 
 import android.Manifest
+import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.widget.Button
+import android.widget.ScrollView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -16,8 +20,34 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Funksiýany indi arkaýyn çagyryp bilersiňiz
+        // Düwmä basylanda log dialogyny açmak
+        val btnOpenLogs = findViewById<Button>(R.id.btnOpenLogs)
+        btnOpenLogs.setOnClickListener {
+            showLogDialog()
+        }
+
         checkPermissionsAndStartService()
+    }
+
+    private fun showLogDialog() {
+        val dialog = Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
+        dialog.setContentView(R.layout.dialog_log_viewer)
+
+        val tvLogContent = dialog.findViewById<TextView>(R.id.tvLogContent)
+        val btnClearLogs = dialog.findViewById<Button>(R.id.btnClearLogs)
+        val scrollView = dialog.findViewById<ScrollView>(R.id.scrollView)
+
+        tvLogContent.text = LogManager.readLogs(this)
+        scrollView.post { scrollView.fullScroll(ScrollView.FOCUS_DOWN) }
+
+        btnClearLogs.setOnClickListener {
+            LogManager.clearLogs(this)
+            tvLogContent.text = LogManager.readLogs(this)
+        }
+
+        // Fiziki Back (Yza) düwmesi basylsa dialog awtomatiki ýapylýar
+        dialog.setCancelable(true)
+        dialog.show()
     }
 
     private fun checkPermissionsAndStartService() {
@@ -27,7 +57,6 @@ class MainActivity : AppCompatActivity() {
             Manifest.permission.READ_SMS
         )
 
-        // Android 6.0 (API 23) we ondan ýokary bolsa Runtime Permission soralýar
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val neededPermissions = permissions.filter {
                 ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
@@ -39,7 +68,6 @@ class MainActivity : AppCompatActivity() {
                 startGatewayService()
             }
         } else {
-            // Android 5.1.1 we ondan pes ulgamlarda rugsattlar eýýäm berlen diýip hasaplanýar
             startGatewayService()
         }
     }
@@ -48,8 +76,10 @@ class MainActivity : AppCompatActivity() {
         try {
             val serviceIntent = Intent(this, GatewayService::class.java)
             startService(serviceIntent)
+            LogManager.log(this, "MainActivity", "GatewayService üstünlikli başladyldy.")
         } catch (e: Exception) {
             e.printStackTrace()
+            LogManager.log(this, "MainActivity", "Service säwligi: ${e.message}")
             Toast.makeText(this, "Service başlatmakda säwlik: ${e.message}", Toast.LENGTH_LONG).show()
         }
     }
@@ -61,11 +91,11 @@ class MainActivity : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 100) {
-            // Ähli rugsatlaryň berlendigini takyk barlamak
             val allGranted = grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }
             if (allGranted) {
                 startGatewayService()
             } else {
+                LogManager.log(this, "MainActivity", "SMS rugsatlary ret edildi.")
                 Toast.makeText(this, "SMS rugsatlary berilmedi!", Toast.LENGTH_SHORT).show()
             }
         }

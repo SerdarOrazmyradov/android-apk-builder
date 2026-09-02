@@ -3,14 +3,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:background="#F5F5F5">
+    android:background="#F5F5F5"
+    android:padding="16dp">
 
     <TextView
+        android:id="@+id/tvWelcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:text="Hoş geldiňiz!"
+        android:textColor="#1976D2"
         android:textSize="28sp"
-        android:textStyle="bold"
-        android:textColor="#1976D2" />
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btnOpenLogs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvWelcome"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp"
+        android:background="#1976D2"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        android:text="Loglary Görmek"
+        android:textColor="#FFFFFF" />
 
 </RelativeLayout>
