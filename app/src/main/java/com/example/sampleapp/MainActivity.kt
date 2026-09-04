@@ -13,11 +13,20 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.android.gms.security.ProviderInstaller
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        try {
+            ProviderInstaller.installIfNeeded(applicationContext)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "TLS Provider install etmekde säwlik: ${e.message}", Toast.LENGTH_LONG).show()
+        }
+
         setContentView(R.layout.activity_main)
 
         // Düwmä basylanda log dialogyny açmak

@@ -3,90 +3,85 @@ package com.example.sampleapp
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.provider.Telephony
 import android.os.Build
+import android.provider.Telephony
+import android.telephony.SmsManager
 import android.telephony.SmsMessage
-import android.util.Log.*
-import android.support.v4.app.NotificationCompat.getExtras
-import android.os.Bundle
-
+import android.util.Log
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class SmsReceiver : BroadcastReceiver() {
 
-
-    private var TAG = "SmsBroadcastReceiver"
-
-    lateinit var serviceProviderNumber: String
-    lateinit var serviceProviderSmsCondition: String
-
-    private var listener: Listener? = null
+    private val TAG = "SmsReceiver"
 
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == Telephony.Sms.Intents.SMS_RECEIVED_ACTION) {
             var smsSender = ""
             var smsBody = ""
+
+            // Android wersiýasyna görä SMS-i okaýarys
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                for (smsMessage in Telephony.Sms.Intents.getMessagesFromIntent(intent)) {
-                    smsSender = smsMessage.displayOriginatingAddress
-                    smsBody += smsMessage.messageBody
+                val messages = Telephony.Sms.Intents.getMessagesFromIntent(intent)
+                for (smsMessage in messages) {
+                    smsSender = smsMessage.displayOriginatingAddress ?: ""
+                    smsBody += smsMessage.messageBody ?: ""
                 }
             } else {
                 val smsBundle = intent.extras
                 if (smsBundle != null) {
-                    val pdus = smsBundle.get("pdus") as Array<Any>
-                    if (pdus == null) {
-                        // Display some error to the user
-                        e(TAG, "SmsBundle had no pdus key")
-                        return
-                    }
+                    val pdus = smsBundle.get("pdus") as? Array<*>
+                    if (pdus == null) return
+                    
                     val messages = arrayOfNulls<SmsMessage>(pdus.size)
                     for (i in messages.indices) {
                         messages[i] = SmsMessage.createFromPdu(pdus[i] as ByteArray)
-                        smsBody += messages[i]!!.getMessageBody()
+                        smsBody += messages[i]?.messageBody ?: ""
                     }
-                    smsSender = messages[0]!!.getOriginatingAddress()
+                    smsSender = messages[0]?.originatingAddress ?: ""
                 }
             }
-            e(TAG, smsBody)
-            var settingsManager = SettingsManager(context)
 
-            val user = AllowedUsers.getUser(senderPhone) // how we can get sender phone 
+            LogManager.log(context, TAG, "Täze SMS geldi -> Tel: $smsSender | Tekst: $smsBody")
 
-            if (user != null && user.apiKey.isNotEmpty()) {
+            val senderPhone = smsSender
+            val messageBody = smsBody
+
+            // Rugsat berlen ulanyjyny barlamak
+            val user = AllowedUsers.getUser(senderPhone)
+
+            if (user != null && !user.apiKey.isNullOrEmpty()) {
+                // Background jübütinde (IO thread) Gemini-den jogap alýarys
                 CoroutineScope(Dispatchers.IO).launch {
-                    val aiResponse = GeminiApiClient.getAiResponse(
-                        apiKey = user.apiKey,
-                        model = user.model,
-                        inputText = messageBody
-                    )
-                    sendSms(senderPhone, aiResponse)
-                }
-            }
+                    try {
+                        LogManager.log(context, TAG, "Gemini AI-a haýyş ugradylýar...")
+                        
+                        val aiResponse = GeminiApiClient.getAiResponse(
+                            apiKey = user.apiKey,
+                            model = user.model,
+                            inputText = messageBody
+                        )
 
-            val i = Intent("SMS_RECEIVED")
-            // Data you need to pass to activity
-            i.putExtra("number", smsSender)
-            i.putExtra("message", smsBody)
-            context.sendBroadcast(i)
-            
-            // su zatlar gerekmi
-            if (::serviceProviderNumber.isInitialized && smsSender == serviceProviderNumber && smsBody.startsWith(
-                    serviceProviderSmsCondition
-                )
-            ) {
-                if (listener != null) {
-                    listener!!.onTextReceived(smsBody)
+                        // AI jogabyny gelen nomera yzyna SMS edip ugratmak
+                        sendSms(senderPhone, aiResponse)
+                        LogManager.log(context, TAG, "AI Jogaby SMS bolup ugradyldy -> $senderPhone")
+
+                    } catch (e: Exception) {
+                        LogManager.log(context, TAG, "AI Ýalňyşlygy: ${e.message}")
+                        e.printStackTrace()
+                    }
                 }
+            } else {
+                LogManager.log(context, TAG, "Belgi rugsat berlen däl ýa-da API key ýok: $senderPhone")
             }
         }
     }
 
-    internal interface Listener {
-        fun onTextReceived(text: String)
-    }
     private fun sendSms(phoneNumber: String, message: String) {
         try {
             val smsManager = SmsManager.getDefault()
+            // Eger AI jogaby uzyn bolsa (160 simwoldan köp), SMS-i böleklere bölüp ugratmak
             val parts = smsManager.divideMessage(message)
             smsManager.sendMultipartTextMessage(phoneNumber, null, parts, null, null)
         } catch (e: Exception) {
