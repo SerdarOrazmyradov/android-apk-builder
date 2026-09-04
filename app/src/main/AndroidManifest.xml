@@ -30,13 +30,6 @@
             </intent-filter>
         </activity>
 
-        <!-- Background Service -->
-        <service
-            android:name=".GatewayService"
-            android:enabled="true"
-            android:exported="false" />
-
-        <!-- SMS Receiver -->
         <receiver
             android:name=".SmsReceiver"
             android:enabled="true"
@@ -46,20 +39,5 @@
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
-
-        <!-- Telefon açylanda awtomatiki servisi başlatmak üçin BootReceiver -->
-        <receiver
-            android:name=".BootReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <!-- Standart Android boot -->
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <!-- HTC we käbir Hytaý enjamlary üçin (Fast Boot) -->
-                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
-                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
-            </intent-filter>
-        </receiver>
-
     </application>
 </manifest>

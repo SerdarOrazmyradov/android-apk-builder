@@ -19,16 +19,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
         setContentView(R.layout.activity_main)
 
-        // Düwmä basylanda log dialogyny açmak
         val btnOpenLogs = findViewById<Button>(R.id.btnOpenLogs)
         btnOpenLogs.setOnClickListener {
             showLogDialog()
         }
 
-        checkPermissionsAndStartService()
     }
 
     private fun showLogDialog() {
@@ -47,59 +44,7 @@ class MainActivity : AppCompatActivity() {
             tvLogContent.text = LogManager.readLogs(this)
         }
 
-        // Fiziki Back (Yza) düwmesi basylsa dialog awtomatiki ýapylýar
         dialog.setCancelable(true)
         dialog.show()
-    }
-
-    private fun checkPermissionsAndStartService() {
-        val permissions = arrayOf(
-            Manifest.permission.RECEIVE_SMS,
-            Manifest.permission.SEND_SMS,
-            Manifest.permission.READ_SMS
-        )
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val neededPermissions = permissions.filter {
-                ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
-            }
-
-            if (neededPermissions.isNotEmpty()) {
-                ActivityCompat.requestPermissions(this, neededPermissions.toTypedArray(), 100)
-            } else {
-                startGatewayService()
-            }
-        } else {
-            startGatewayService()
-        }
-    }
-
-    private fun startGatewayService() {
-        try {
-            val serviceIntent = Intent(this, GatewayService::class.java)
-            startService(serviceIntent)
-            LogManager.log(this, "MainActivity", "GatewayService üstünlikli başladyldy.")
-        } catch (e: Exception) {
-            e.printStackTrace()
-            LogManager.log(this, "MainActivity", "Service säwligi: ${e.message}")
-            Toast.makeText(this, "Service başlatmakda säwlik: ${e.message}", Toast.LENGTH_LONG).show()
-        }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == 100) {
-            val allGranted = grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }
-            if (allGranted) {
-                startGatewayService()
-            } else {
-                LogManager.log(this, "MainActivity", "SMS rugsatlary ret edildi.")
-                Toast.makeText(this, "SMS rugsatlary berilmedi!", Toast.LENGTH_SHORT).show()
-            }
-        }
     }
 }

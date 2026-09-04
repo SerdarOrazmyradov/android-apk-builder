@@ -57,13 +57,12 @@ class SmsReceiver : BroadcastReceiver() {
                     try {
                         LogManager.log(context, TAG, "Gemini AI-a haýyş ugradylýar...")
                         
-                        val aiResponse = GeminiApiClient.getAiResponse(
-                            apiKey = user.apiKey,
-                            model = user.model,
-                            inputText = messageBody
-                        )
-
-                        // AI jogabyny gelen nomera yzyna SMS edip ugratmak
+                        // val aiResponse = GeminiApiClient.getAiResponse(
+                        //     apiKey = user.apiKey,
+                        //     model = user.model,
+                        //     inputText = messageBody
+                        // )
+                        val aiResponse = "salam,sms send test edilyar"
                         sendSms(senderPhone, aiResponse)
                         LogManager.log(context, TAG, "AI Jogaby SMS bolup ugradyldy -> $senderPhone")
 
@@ -81,7 +80,6 @@ class SmsReceiver : BroadcastReceiver() {
     private fun sendSms(phoneNumber: String, message: String) {
         try {
             val smsManager = SmsManager.getDefault()
-            // Eger AI jogaby uzyn bolsa (160 simwoldan köp), SMS-i böleklere bölüp ugratmak
             val parts = smsManager.divideMessage(message)
             smsManager.sendMultipartTextMessage(phoneNumber, null, parts, null, null)
         } catch (e: Exception) {
