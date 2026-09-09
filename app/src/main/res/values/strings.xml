@@ -1,6 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Sample App</string>
-    <string name="welcome_message">Welcome to Sample App!</string>
-    <string name="click_me">Click Me!</string>
-    <string name="initial_count">Button clicked 0 times</string>
+    <string name="app_name">SMS Gmail Bridge</string>
+    <string name="status_stopped">Stopped</string>
+    <string name="status_running">Running</string>
+    <string name="last_poll_never">Last poll: never</string>
+    <string name="btn_start">Start bridge</string>
+    <string name="btn_stop">Stop bridge</string>
+    <string name="btn_setup">Setup</string>
+    <string name="btn_history">History</string>
+    <string name="btn_save">Save</string>
+    <string name="btn_test_smtp">Test SMTP</string>
+    <string name="btn_test_imap">Test IMAP</string>
+    <string name="setup_title">Mail configuration</string>
+    <string name="history_title">Forward history</string>
+    <string name="label_smtp_host">SMTP host</string>
+    <string name="label_smtp_port">SMTP port</string>
+    <string name="label_smtp_user">SMTP username</string>
+    <string name="label_smtp_password">SMTP password / app password</string>
+    <string name="label_smtp_starttls">SMTP STARTTLS</string>
+    <string name="label_imap_host">IMAP host</string>
+    <string name="label_imap_port">IMAP port</string>
+    <string name="label_imap_user">IMAP username</string>
+    <string name="label_imap_password">IMAP password / app password</string>
+    <string name="label_imap_ssl">IMAP SSL</string>
+    <string name="label_imap_folder">IMAP folder</string>
+    <string name="label_forward_to">Forward SMS to email</string>
+    <string name="label_allowed">Allowed senders (one email per line)</string>
+    <string name="label_poll">Poll interval seconds (10-300)</string>
+    <string name="need_permissions">Grant SMS permissions to start the bridge</string>
+    <string name="need_config">Save SMTP and IMAP credentials in Setup first</string>
+    <string name="saved">Saved</string>
 </resources>
