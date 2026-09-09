@@ -55,7 +55,8 @@ class SmsReceiver : BroadcastReceiver() {
                     try {
                         val subject = "QUESTION from ${user.name} ($senderPhone)"
                         val body = "Tel: $senderPhone\nTekst: $messageBody"
-                        EmailSender.sendEmail(context, subject, body)    // but now we not have this EmailSender class, we need to implement it                     
+                        // EmailSender.sendEmail(context, subject, body)    
+                        // but now we not have this EmailSender class, we need to implement it                     
 
                     } catch (e: Exception) {
                         LogManager.log(context, TAG, "Email iberilende säwlik: ${e.message}")
