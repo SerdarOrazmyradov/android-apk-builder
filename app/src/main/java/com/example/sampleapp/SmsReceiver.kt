@@ -48,31 +48,22 @@ class SmsReceiver : BroadcastReceiver() {
             val senderPhone = smsSender
             val messageBody = smsBody
 
-            // Rugsat berlen ulanyjyny barlamak
             val user = AllowedUsers.getUser(senderPhone)
 
-            if (user != null && !user.apiKey.isNullOrEmpty()) {
-                // Background jübütinde (IO thread) Gemini-den jogap alýarys
+            if (user != null) {
                 CoroutineScope(Dispatchers.IO).launch {
                     try {
-                        LogManager.log(context, TAG, "Gemini AI-a haýyş ugradylýar...")
-                        
-                        // val aiResponse = GeminiApiClient.getAiResponse(
-                        //     apiKey = user.apiKey,
-                        //     model = user.model,
-                        //     inputText = messageBody
-                        // )
-                        val aiResponse = "salam,sms send test edilyar"
-                        sendSms(senderPhone, aiResponse)
-                        LogManager.log(context, TAG, "AI Jogaby SMS bolup ugradyldy -> $senderPhone")
+                        val subject = "QUESTION from ${user.name} ($senderPhone)"
+                        val body = "Tel: $senderPhone\nTekst: $messageBody"
+                        EmailSender.sendEmail(context, subject, body)    // but now we not have this EmailSender class, we need to implement it                     
 
                     } catch (e: Exception) {
-                        LogManager.log(context, TAG, "AI Ýalňyşlygy: ${e.message}")
+                        LogManager.log(context, TAG, "Email iberilende säwlik: ${e.message}")
                         e.printStackTrace()
                     }
                 }
             } else {
-                LogManager.log(context, TAG, "Belgi rugsat berlen däl ýa-da API key ýok: $senderPhone")
+                LogManager.log(context, TAG, "Belgi rugsat berlen däl: $senderPhone")
             }
         }
     }
