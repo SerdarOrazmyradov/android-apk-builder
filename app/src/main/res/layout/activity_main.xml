@@ -6,7 +6,7 @@
     android:background="#F5F5F5"
     android:padding="16dp">
 
-    <TextView
+    <!-- <TextView
         android:id="@+id/tvWelcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -27,6 +27,41 @@
         android:paddingLeft="24dp"
         android:paddingRight="24dp"
         android:text="Loglary Görmek"
-        android:textColor="#FFFFFF" />
+        android:textColor="#FFFFFFFF" /> -->
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SMTP Sazlamalary (Gmail)"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
+
+    <EditText
+        android:id="@+id/etSenderEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Ugratjak Gmail adresiňiz"
+        android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/etAppPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Gmail App Password (16 harp)"
+        android:inputType="textPassword" />
+
+    <EditText
+        android:id="@+id/etReceiverEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Kabul etjek Email adresi"
+        android:inputType="textEmailAddress" />
+
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Ýatda sakla" />
 </RelativeLayout>

@@ -49,23 +49,27 @@ class SmsReceiver : BroadcastReceiver() {
             val messageBody = smsBody
 
             val user = AllowedUsers.getUser(senderPhone)
-
-            if (user != null) {
-                CoroutineScope(Dispatchers.IO).launch {
-                    try {
-                        val subject = "QUESTION from ${user.name} ($senderPhone)"
-                        val body = "Tel: $senderPhone\nTekst: $messageBody"
-                        // EmailSender.sendEmail(context, subject, body)    
-                        // but now we not have this EmailSender class, we need to implement it                     
-
-                    } catch (e: Exception) {
-                        LogManager.log(context, TAG, "Email iberilende säwlik: ${e.message}")
-                        e.printStackTrace()
+            if (SmtpPreferences.getSenderEmail(context).isNotEmpty() && SmtpPreferences.getAppPassword(context).isNotEmpty() && SmtpPreferences.getReceiverEmail(context).isNotEmpty()) {
+                if (user != null) {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        try {
+                            val subject = "SMS alert: ${user.name} ($senderPhone)"
+                            val body = "Iberiji: $senderPhone\nSms Tekst:\n$messageBody"
+                            // EmailSender çagyrýarys
+                            EmailSender.sendEmail(context, subject, body)
+                        }
+                        catch (e: Exception) {
+                            LogManager.log(context, TAG, "Email iberilende säwlik: ${e.message}")
+                            e.printStackTrace()
+                        }
                     }
+                } else {
+                    LogManager.log(context, TAG, "Belgi rugsat berlen däl: $senderPhone")
                 }
             } else {
-                LogManager.log(context, TAG, "Belgi rugsat berlen däl: $senderPhone")
+                LogManager.log(context, TAG, "Email sazlamalary ýatda saklanmady")
             }
+            
         }
     }
 

@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import android.widget.EditText
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,6 +25,29 @@ class MainActivity : AppCompatActivity() {
         val btnOpenLogs = findViewById<Button>(R.id.btnOpenLogs)
         btnOpenLogs.setOnClickListener {
             showLogDialog()
+        }
+
+        val etSenderEmail = findViewById<EditText>(R.id.etSenderEmail)
+        val etAppPassword = findViewById<EditText>(R.id.etAppPassword)
+        val etReceiverEmail = findViewById<EditText>(R.id.etReceiverEmail)
+        val btnSave = findViewById<Button>(R.id.btnSave)
+
+        // Öňki saklanan maglumatlary ýüklemek
+        etSenderEmail.setText(SmtpPreferences.getSenderEmail(this))
+        etAppPassword.setText(SmtpPreferences.getAppPassword(this))
+        etReceiverEmail.setText(SmtpPreferences.getReceiverEmail(this))
+
+        btnSave.setOnClickListener {
+            val sender = etSenderEmail.text.toString()
+            val pass = etAppPassword.text.toString()
+            val receiver = etReceiverEmail.text.toString()
+
+            if (sender.isEmpty() || pass.isEmpty() || receiver.isEmpty()) {
+                Toast.makeText(this, "Ähli meýdanlary dolduryň!", Toast.LENGTH_SHORT).show()
+            } else {
+                SmtpPreferences.saveSettings(this, sender, pass, receiver)
+                Toast.makeText(this, "Sazlamalar ýatda saklandy", Toast.LENGTH_SHORT).show()
+            }
         }
 
     }
