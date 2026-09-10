@@ -17,6 +17,8 @@ import android.widget.EditText
 
 class MainActivity : AppCompatActivity() {
 
+    private val SMS_PERMISSION_CODE = 101
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -38,18 +40,30 @@ class MainActivity : AppCompatActivity() {
         etReceiverEmail.setText(SmtpPreferences.getReceiverEmail(this))
 
         btnSave.setOnClickListener {
-            val sender = etSenderEmail.text.toString()
-            val pass = etAppPassword.text.toString()
-            val receiver = etReceiverEmail.text.toString()
+            val sender = etSenderEmail.text.toString().trim()
+            val pass = etAppPassword.text.toString().trim()
+            val receiver = etReceiverEmail.text.toString().trim()
 
             if (sender.isEmpty() || pass.isEmpty() || receiver.isEmpty()) {
                 Toast.makeText(this, "Ähli meýdanlary dolduryň!", Toast.LENGTH_SHORT).show()
             } else {
                 SmtpPreferences.saveSettings(this, sender, pass, receiver)
-                Toast.makeText(this, "Sazlamalar ýatda saklandy", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Sazlamalar ýatda saklandy!", Toast.LENGTH_SHORT).show()
+                startBridgeService()
             }
         }
 
+    }
+
+    private fun startBridgeService() {
+        // Sazlamalaryň doly doldurylandygyny barlap soň başlatýarys
+        val sender = SmtpPreferences.getSenderEmail(this)
+        val pass = SmtpPreferences.getAppPassword(this)
+
+        if (!sender.isNullOrEmpty() && !pass.isNullOrEmpty()) {
+            val service = SmsMailBridgeService(applicationContext)
+            service.startListening()
+        }
     }
 
     private fun showLogDialog() {

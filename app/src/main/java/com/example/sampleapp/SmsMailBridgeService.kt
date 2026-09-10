@@ -1,8 +1,9 @@
 package com.example.sampleapp
 
+import android.content.Context
 import kotlinx.coroutines.*
 
-class SmsMailBridgeService {
+class SmsMailBridgeService(private val context: Context) {
 
     private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
