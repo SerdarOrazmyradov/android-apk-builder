@@ -22,10 +22,10 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
-        val btnOpenLogs = findViewById<Button>(R.id.btnOpenLogs)
-        btnOpenLogs.setOnClickListener {
-            showLogDialog()
-        }
+        // val btnOpenLogs = findViewById<Button>(R.id.btnOpenLogs)
+        // btnOpenLogs.setOnClickListener {
+        //     showLogDialog()
+        // }
 
         val etSenderEmail = findViewById<EditText>(R.id.etSenderEmail)
         val etAppPassword = findViewById<EditText>(R.id.etAppPassword)
